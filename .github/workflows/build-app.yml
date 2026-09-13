@@ -24,34 +24,30 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Setup Gradle 8.7
+      - name: Setup Gradle 8.9
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: "8.7"
+          gradle-version: "8.9"
 
-      # gradlew var ama gradle-wrapper.jar yoksa da yeniden oluştur
       - name: Repair Gradle Wrapper
         run: |
           if [ ! -f "./gradlew" ] || [ ! -f "./gradle/wrapper/gradle-wrapper.jar" ]; then
-            echo "Gradle Wrapper eksik veya bozuk. Yeniden oluşturuluyor..."
-
             rm -f gradlew
             rm -f gradlew.bat
             rm -rf gradle/wrapper
 
-            gradle wrapper --gradle-version 8.7
-          else
-            echo "Gradle Wrapper mevcut."
+            gradle wrapper --gradle-version 8.9
           fi
 
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Check Gradle Wrapper
+      - name: Force Gradle 8.9 Wrapper
         run: |
-          echo "Wrapper files:"
-          ls -la gradle/wrapper
-          ./gradlew --version
+          ./gradlew wrapper --gradle-version 8.9
+
+      - name: Check Gradle version
+        run: ./gradlew --version
 
       - name: Build Debug APK
         env:
@@ -60,11 +56,6 @@ jobs:
           ./gradlew clean :app:assembleDebug \
             -PCAGAN_CONFIG_URL="$CAGAN_CONFIG_URL" \
             --stacktrace
-
-      - name: Find APK
-        if: success()
-        run: |
-          find . -type f -name "*.apk" -print
 
       - name: Upload APK
         if: success()
