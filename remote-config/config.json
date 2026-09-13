@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "playlists": [
+    {
+      "name": "Varsayılan Liste",
+      "url": "https://YOUR-PLAYLIST-HOST/default.m3u",
+      "enabled": true
+    },
+    {
+      "name": "Yedek Liste",
+      "url": "https://YOUR-PLAYLIST-HOST/backup.m3u",
+      "enabled": true
+    }
+  ]
+}
