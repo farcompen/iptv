@@ -11,9 +11,20 @@
       "url": "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8",
       "enabled": true
     }, {
-      "name": "iptv-turk",
+      "name": "turk",
       "url": "https://iptv-org.github.io/iptv/countries/tr.m3u",
       "enabled": true
-    }
+    },
+     {
+      "name": "turk-2",
+      "url": "https://onureroz.com/indirmeler/turk/all.m3u",
+      "enabled": true
+    },
+    {
+      "name": "dunya",
+      "url": "https://onureroz.com/indirmeler/dunya/index.m3u",
+      "enabled": true
+    },
+    
   ]
 }
