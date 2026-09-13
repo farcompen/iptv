@@ -2,13 +2,17 @@
   "version": 1,
   "playlists": [
     {
-      "name": "Varsayılan Liste",
-      "url": "https://YOUR-PLAYLIST-HOST/default.m3u",
+      "name": "acik-kaynak",
+      "url": "https://iptv-org.github.io/iptv/index.m3u",
       "enabled": true
     },
     {
-      "name": "Yedek Liste",
-      "url": "https://YOUR-PLAYLIST-HOST/backup.m3u",
+      "name": "free-iptv",
+      "url": "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8",
+      "enabled": true
+    }, {
+      "name": "iptv-turk",
+      "url": "https://iptv-org.github.io/iptv/countries/tr.m3u",
       "enabled": true
     }
   ]
