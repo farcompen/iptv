@@ -1,0 +1,82 @@
+name: Build Cagan IP TV APK
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      # Repository dosyalarını al
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Java 17
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # Gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # Gradle Wrapper yoksa oluştur
+      - name: Create Gradle Wrapper if missing
+        run: |
+          if [ ! -f "./gradlew" ]; then
+            echo "gradlew bulunamadı, wrapper oluşturuluyor..."
+            gradle wrapper --gradle-version 8.7
+          fi
+
+      # Linux çalıştırma yetkisi
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      # Config URL kontrolü
+      - name: Check Remote Config Secret
+        env:
+          CAGAN_CONFIG_URL: ${{ secrets.CAGAN_CONFIG_URL }}
+        run: |
+          if [ -z "$CAGAN_CONFIG_URL" ]; then
+            echo "UYARI: CAGAN_CONFIG_URL tanımlanmamış."
+          else
+            echo "CAGAN_CONFIG_URL tanımlı."
+          fi
+
+      # Debug APK oluştur
+      - name: Build Debug APK
+        env:
+          CAGAN_CONFIG_URL: ${{ secrets.CAGAN_CONFIG_URL }}
+        run: |
+          ./gradlew clean assembleDebug \
+            -PCAGAN_CONFIG_URL="$CAGAN_CONFIG_URL" \
+            --stacktrace
+
+      # Oluşan APK'yı bul
+      - name: List APK files
+        if: success()
+        run: |
+          echo "Generated APK files:"
+          find . -type f -name "*.apk" -print
+
+      # APK artifact
+      - name: Upload APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Cagan-IP-TV
+          path: |
+            app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 30
